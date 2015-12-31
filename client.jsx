@@ -59,7 +59,6 @@ function xmlconnection(host) {
       offset += length;
 
       if(type == 1) {
-        alert(data);
         datas.push(new XML(data));
       } else {
         datas.push({cid: cid, data: data});
