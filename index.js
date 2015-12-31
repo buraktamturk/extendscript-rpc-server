@@ -55,6 +55,11 @@ module.exports = function(functionTable) {
               var type2 = data.charCodeAt(offset3);
               offset3 += 1;
 
+              if(!nextSize || (nextSize > (data.length - offset3))) {
+                socket.end();
+                break;
+              }
+
               switch(type2) {
                 case 1:
                   var xmlDATA = et.parse(new Buffer(data.slice(offset3, nextSize + offset3), 'binary').toString('ucs2'));
@@ -121,7 +126,7 @@ module.exports = function(functionTable) {
                 });
               });
 
-            type = 1;
+            type = 0;
             remain = 4;
             data = "";
           }
