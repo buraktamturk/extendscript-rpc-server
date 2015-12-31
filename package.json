@@ -1,6 +1,6 @@
 {
   "name": "extendscript-rpc-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ExtendScript XML / Binary RPC server & client",
   "main": "index.js",
   "scripts": {
