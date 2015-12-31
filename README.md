@@ -17,6 +17,8 @@ However, this library can also transport binary alongside with XML, just like mu
 **Example Client**
 
 ```JavaScript
+#include "client.jsx" // copy client.jsx to the folder, which script is located at, or copy contents of the client.jsx to here
+
 var connection = new xmlconnection("localhost:3333");
 
 var response = connection.send([<Login username="burak"
