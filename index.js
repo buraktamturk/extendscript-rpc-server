@@ -57,7 +57,7 @@ module.exports = function(functionTable) {
 
               switch(type2) {
                 case 1:
-                  var xmlDATA = et.parse(new Buffer(data.slice(offset3, nextSize + offset3), 'binary').toString('utf8'));
+                  var xmlDATA = et.parse(new Buffer(data.slice(offset3, nextSize + offset3), 'binary').toString('ucs2'));
 
                   var fnc = functionTable[xmlDATA._root.tag];
 
@@ -86,8 +86,8 @@ module.exports = function(functionTable) {
                   } else {
                     var etree = new ElementTree(value);
                     var xml = etree.write({'xml_declaration': false});
-                    //var len = Buffer.byteLength(xml, 'utf8');
-                    return { cid: cids[index], type: 1, data: xml, length: xml.length };
+                    var edata = new Buffer(xml, 'ucs2');
+                    return { cid: cids[index], type: 1, data: edata, length: edata.length };
                   }
                 });
 
@@ -117,11 +117,7 @@ module.exports = function(functionTable) {
                       String.fromCharCode(value.type);
 
                   socket.write(payload2, 'binary');
-                  if(value.type == 1) {
-                    socket.write(value.data, 'utf-8');
-                  } else {
-                    socket.write(value.data, 'binary');
-                  }
+                  socket.write(value.data, 'binary');
                 });
               });
 

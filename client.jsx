@@ -1,15 +1,30 @@
 
-// taken from http://stackoverflow.com/questions/5515869/string-length-in-bytes-in-javascript
-function byteLength(str) {
-  // returns the byte length of an utf8 string
-  var s = str.length;
-  for (var i=str.length-1; i>=0; i--) {
-    var code = str.charCodeAt(i);
-    if (code > 0x7f && code <= 0x7ff) s++;
-    else if (code > 0x7ff && code <= 0xffff) s+=2;
-    if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
+// thanks to http://stackoverflow.com/questions/14592364/utf-16-to-utf-8-conversion-in-javascript
+function decodeUTF16LE( binaryStr ) {
+  var cp = [];
+  for( var i = 0; i < binaryStr.length; i+=2) {
+      cp.push(
+           binaryStr.charCodeAt(i) |
+          ( binaryStr.charCodeAt(i+1) << 8 )
+      );
   }
-  return s;
+
+  return String.fromCharCode.apply( String, cp );
+}
+
+function encodeUTF16LE( binaryStr ) {
+  var cp = [];
+  for( var i = 0; i < binaryStr.length; ++i) {
+    cp.push(
+         binaryStr.charCodeAt(i) & 0xFF
+    );
+
+    cp.push(
+      ( (binaryStr.charCodeAt(i) >> 8) & 0xFF )
+    );
+  }
+
+  return String.fromCharCode.apply( String, cp );
 }
 
 function xmlconnection(host) {
@@ -45,21 +60,15 @@ function xmlconnection(host) {
       var type = payload.charCodeAt(offset);
       offset += 1;
 
-      if(type == 1) {
-        this.sock.encoding = 'utf8';
-      }
-
       data = this.sock.read(length);
       if(!data || !data.length) {
         throw "couldn't read from the socket";
       }
 
-      this.sock.encoding = 'binary';
-
       offset += length;
 
       if(type == 1) {
-        datas.push(new XML(data));
+        datas.push(new XML(decodeUTF16LE(data)));
       } else {
         datas.push({cid: cid, data: data});
       }
@@ -79,10 +88,10 @@ function xmlconnection(host) {
       var data = datas[i];
 
       if(data.toXMLString) {
-        var str = data.toXMLString();
-        data = datas[i] = { cid: 0, type: 1, data: str, length: byteLength(str), charset: 'utf8' };
+        var str = encodeUTF16LE(data.toXMLString());
+        data = datas[i] = { cid: 0, type: 1, data: str, length: str.length };
       } else {
-        data = datas[i] = { cid: data.cid || i, type: 2, data: data, length: data.length, charset: 'binary' };
+        data = datas[i] = { cid: data.cid || i, type: 2, data: data, length: data.length };
       }
 
       length += data.length + 9;
@@ -109,10 +118,7 @@ function xmlconnection(host) {
           String.fromCharCode(data.type);
 
       this.sock.write(payload);
-
-      this.sock.encoding = data.charset || 'binary';
       this.sock.write(data.data);
-      this.sock.encoding = 'binary';
     }
 
     return this.recv();
