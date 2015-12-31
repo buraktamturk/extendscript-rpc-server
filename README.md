@@ -27,7 +27,7 @@ alert(response[0].toXMLString());
 **Example Server**
 
 ```JavaScript
-var esrpc = require('../extendscript-rpc-server/index'),
+var esrpc = require('extendscript-rpc-server'),
     et = require('elementtree'),
     XML = et.XML,
     ElementTree = et.ElementTree,
