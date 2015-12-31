@@ -1,0 +1,27 @@
+{
+  "name": "extendscript-rpc-server",
+  "version": "1.0.0",
+  "description": "ExtendScript XML / Binary RPC server, see extendscript-rpc-client package for the client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/buraktamturk/extendscript-rpc-server.git"
+  },
+  "keywords": [
+    "adobe",
+    "extendscript",
+    "rpc"
+  ],
+  "author": "Burak Tamtürk <buraktamturk@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buraktamturk/extendscript-rpc-server/issues"
+  },
+  "homepage": "https://github.com/buraktamturk/extendscript-rpc-server",
+  "dependencies": {
+    "elementtree": "^0.1.6"
+  }
+}
