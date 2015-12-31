@@ -16,7 +16,7 @@ function xmlconnection(host) {
   this.sock = new Socket();
 
   if(!this.sock.open(host, 'binary')) {
-    throw "connection timeour or refused";
+    throw "connection timeout or refused";
   }
 
   this.recv = function() {
