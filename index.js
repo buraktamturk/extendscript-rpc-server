@@ -1,4 +1,6 @@
 
+'use strict';
+
 var net = require('net'),
     et = require('elementtree'),
     ElementTree = et.ElementTree;
